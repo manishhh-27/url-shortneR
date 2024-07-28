@@ -1,24 +1,35 @@
+require('dotenv').config();
 const mongoose = require('mongoose')
 const express=require('express');
+const path = require('path');
 const ShortUrl = require('./models/shortUrl')
 
-mongoose.connect('mongodb://localhost/urlshortner', {
+const BaseUrl="http://localhost:3000/";
+
+const dbUrl =process.env.MONGODBURL;
+console.log(dbUrl)
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    
+    useUnifiedTopology: true,
+   
 });
 
 const db = mongoose.connection;
+
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
     console.log("Database connected");
 });
-
 app=express();
+
+
 app.set('view engine','ejs');
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static('public'))
 app.get('/',async (req,res)=>{
     const shortUrls = await ShortUrl.find()
-    res.render('index',{shortUrls: shortUrls})
+    res.render('index.ejs',{shortUrls: shortUrls})
 })
 
 app.post('/shortUrls',async (req,res)=>{
