@@ -7,7 +7,6 @@ const ShortUrl = require('./models/shortUrl')
 const BaseUrl="http://localhost:3000/";
 
 const dbUrl =process.env.MONGODBURL;
-console.log(dbUrl)
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     
@@ -47,7 +46,7 @@ app.get('/:shortUrl', async (req, res) => {
   
     res.redirect(shortUrl.full)
   })
-
-app.listen(3000,()=>{
-    console.log('serving on port 3000')
-})
+  const port = process.env.PORT || 4000;
+  app.listen(port,()=>{
+      console.log('serving on port')
+  })
